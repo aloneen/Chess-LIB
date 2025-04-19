@@ -2,6 +2,7 @@ package com.mygdx.chess.factory;
 
 import com.mygdx.chess.actors.ChessPiece;
 
+
 /**
  * Factory Method for creating ChessPiece instances, including promotion.
  */
