@@ -1,12 +1,15 @@
 package com.mygdx.chess.input;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.chess.ChessGame;
 import com.mygdx.chess.actors.ChessPiece;
+
 import com.mygdx.chess.logic.GameLogic;
 import com.mygdx.chess.logic.Move;
+import com.mygdx.chess.memento.GameMemento;
 import com.mygdx.chess.model.IBoardModel;
 import com.mygdx.chess.screens.BotGameScreen;
 import com.mygdx.chess.screens.PromotionScreen;
@@ -15,6 +18,7 @@ import com.mygdx.chess.view.IChessRenderer;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 import static com.mygdx.chess.util.BoardConfig.SQUARE_SIZE;
 
@@ -28,6 +32,8 @@ public class ChessInputProcessor implements InputProcessor, IGameInputProcessor 
     private final OrthographicCamera camera;
     private final IChessRenderer     renderer;
     private ChessPiece               selected;
+
+    private final Stack<GameMemento> mementoStack = new Stack<>();
 
     public ChessInputProcessor(
         ChessGame game,
@@ -46,6 +52,8 @@ public class ChessInputProcessor implements InputProcessor, IGameInputProcessor 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         GameLogic logic = boardModel.getGameLogic();
         List<ChessPiece> pieces = boardModel.getPieces();
+        mementoStack.push(boardModel.createMemento());
+
 
         // 1) Bot‐mode: ignore taps when it's the engine’s turn
         if (game.getScreen() instanceof BotGameScreen) {
@@ -118,6 +126,12 @@ public class ChessInputProcessor implements InputProcessor, IGameInputProcessor 
             // ---- MOVE PIECE ----
             selected.setPosition(boardX, boardY);
 
+
+
+
+
+
+
             // ---- SET/CLEAR EN PASSANT TARGET ----
             if (selected.getType().equalsIgnoreCase("pawn")
                 && Math.abs(boardY - startY) == 2) {
@@ -173,8 +187,24 @@ public class ChessInputProcessor implements InputProcessor, IGameInputProcessor 
         return true;
     }
 
+
+
+
+
     // Other InputProcessor stubs — no changes
-    @Override public boolean keyDown(int keycode)                   { return false; }
+    @Override
+    public boolean keyDown(int keycode) {
+        if (!(game.getScreen() instanceof BotGameScreen) && keycode == Input.Keys.R) {
+            if (!mementoStack.isEmpty()) {
+                GameMemento last = mementoStack.pop();
+                boardModel.restoreMemento(last);
+                boardModel.setPossibleMoves(null);
+            }
+            return true;
+        }
+        return false;
+    }
+
     @Override public boolean keyUp(int keycode)                     { return false; }
     @Override public boolean keyTyped(char character)               { return false; }
     @Override public boolean touchUp(int x, int y, int p, int b)    { return false; }

@@ -5,6 +5,7 @@ package com.mygdx.chess.model;
 import com.mygdx.chess.actors.ChessPiece;
 import com.mygdx.chess.logic.GameLogic;
 import com.mygdx.chess.logic.Move;
+import com.mygdx.chess.memento.GameMemento;
 
 import java.util.List;
 
@@ -17,4 +18,7 @@ public interface IBoardModel {
     boolean isFlipped();
     List<Move> getPossibleMoves();
     void       setPossibleMoves(List<Move> moves);
+
+    GameMemento createMemento();
+    void restoreMemento(GameMemento memento);
 }
