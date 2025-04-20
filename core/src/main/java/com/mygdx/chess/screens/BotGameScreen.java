@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.chess.ChessGame;
 import com.mygdx.chess.actors.ChessPiece;
+import com.mygdx.chess.factory.BoardModelFactory;
 import com.mygdx.chess.input.ChessInputProcessor;
 import com.mygdx.chess.logic.GameLogic;
 import com.mygdx.chess.model.BoardModel;
@@ -54,7 +55,8 @@ public class BotGameScreen implements Screen {
         camera.setToOrtho(false, 800, 800);
 
         // model, renderer, logic
-        this.model    = new BoardModel(!humanIsWhite);
+        //Factory Method Design Pattern.
+        this.model = BoardModelFactory.createStandardBoard(!humanIsWhite);
         this.renderer = new ChessRenderer(model);
         this.logic    = model.getGameLogic();
 

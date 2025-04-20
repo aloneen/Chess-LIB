@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.chess.ChessGame;
+import com.mygdx.chess.factory.BoardModelFactory;
 import com.mygdx.chess.input.ChessInputProcessor;
 import com.mygdx.chess.input.IGameInputProcessor;
 import com.mygdx.chess.model.IBoardModel;
@@ -33,7 +34,9 @@ public class GameScreen implements Screen {
         this.camera = new OrthographicCamera();
         camera.setToOrtho(false, BOARD_SIZE, BOARD_SIZE);
 
-        this.model          = new com.mygdx.chess.model.BoardModel(flipY);
+        //this.model          = new com.mygdx.chess.model.BoardModel(flipY); <- whitout Factory method.
+
+        this.model = BoardModelFactory.createStandardBoard(flipY);
         this.renderer       = new com.mygdx.chess.view.ChessRenderer(model);
         this.inputProcessor = new ChessInputProcessor(game, model, camera, renderer);
         Gdx.input.setInputProcessor(inputProcessor);
