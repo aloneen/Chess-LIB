@@ -4,6 +4,7 @@ package com.mygdx.chess;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.chess.proxy.TextureProxy;
 import com.mygdx.chess.screens.MainMenuScreen;
 
 /**
@@ -26,6 +27,7 @@ public class ChessGame extends Game {
 
     @Override
     public void dispose() {
+        TextureProxy.disposeAll();
         // Dispose common resources
         if (batch != null) batch.dispose();
         // Screens and their assets will be disposed by LibGDX when setScreen is changed or on exit
